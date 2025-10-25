@@ -14,10 +14,61 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-} 
+  id            Int              @id @default(autoincrement())
+  name          String
+  email         String           @unique
+  passwordHash  String
+  role          String           // 'student' or 'admin'
+
+  // Relations
+  groupsCreated Group[]          @relation("CreatedGroups")
+  groupMembers  GroupMember[]
+  assignments   Assignment[]     @relation("AdminAssignments")
+}
+
+model Group {
+  id             Int              @id @default(autoincrement())
+  name           String
+  createdById    Int
+
+  // Relations
+  createdBy      User             @relation("CreatedGroups", fields: [createdById], references: [id])
+  members        GroupMember[]
+  submissions    GroupSubmission[]
+}
+
+model GroupMember {
+  id          Int     @id @default(autoincrement())
+  groupId     Int
+  studentId   Int
+  isConfirmed Boolean  @default(false)
+
+  // Relations
+  group       Group    @relation(fields: [groupId], references: [id])
+  student     User     @relation(fields: [studentId], references: [id])
+}
+
+model Assignment {
+  id               Int               @id @default(autoincrement())
+  title            String
+  description      String
+  dueDate          DateTime
+  onedriveLink     String
+  createdByAdminId Int
+
+  // Relations
+  createdByAdmin   User              @relation("AdminAssignments", fields: [createdByAdminId], references: [id])
+  submissions      GroupSubmission[]
+}
+
+model GroupSubmission {
+  id            Int         @id @default(autoincrement())
+  groupId       Int
+  assignmentId  Int
+  isSubmitted   Boolean     @default(false)
+  submittedAt   DateTime?
+
+  // Relations
+  group         Group       @relation(fields: [groupId], references: [id])
+  assignment    Assignment  @relation(fields: [assignmentId], references: [id])
+}
