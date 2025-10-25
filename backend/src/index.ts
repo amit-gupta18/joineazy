@@ -7,7 +7,7 @@ dotenv.config();
 const app = express();
 const port = 8000;
 // const router = express.Router();
-import authRouter from './routes/authRoutes';
+import authRouter from './routes/authRoutes.js';
 
 app.use(express.json());
 app.use(cors());
