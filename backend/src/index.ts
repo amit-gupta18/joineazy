@@ -5,7 +5,7 @@ import dotenv from 'dotenv'
 dotenv.config();
 
 const app = express();
-const port = 8000;
+const port = 3000;
 // const router = express.Router();
 import authRouter from './routes/authRoutes.js';
 

@@ -25,8 +25,8 @@ async function main() {
 
     // Fetch created users (since createMany doesn’t return them)
     const allUsers = await prisma.user.findMany();
-    const admin1 = allUsers.find(u => u.email === "admin1@example.com")!;
-    const admin2 = allUsers.find(u => u.email === "admin2@example.com")!;
+    const admin1 = allUsers.find(u => u.email === "admin1@example.com");
+    const admin2 = allUsers.find(u => u.email === "admin2@example.com");
     const [amit, rohit, sneha, arjun] = allUsers.filter(u => u.role === "student");
 
     // --- Groups ---
